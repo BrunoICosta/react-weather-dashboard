@@ -1,0 +1,9 @@
+.grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.current {
+  min-width: 0;
+}

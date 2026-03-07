@@ -1,0 +1,144 @@
+.card {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.place {
+  margin: 0;
+  font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.subtitle,
+.updated,
+.feelsLike,
+.range,
+.description {
+  margin: 0;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.updated {
+  margin-top: var(--space-1);
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.icon {
+  flex-shrink: 0;
+  filter: drop-shadow(0 6px 12px rgb(15 23 42 / 0.18));
+}
+
+.now {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.temperature {
+  margin: 0;
+  font-size: clamp(4rem, 3rem + 5vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.description {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.feelsLike,
+.range {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.detail {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+}
+
+.detail dt {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.detail dd {
+  margin: var(--space-1) 0 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.muted {
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.uvBadge {
+  display: inline-block;
+  padding: 0 var(--space-2);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  vertical-align: middle;
+  color: #0f172a;
+}
+
+.uvBadge[data-level='low'] {
+  background: #86efac;
+}
+
+.uvBadge[data-level='moderate'] {
+  background: #fde047;
+}
+
+.uvBadge[data-level='high'] {
+  background: #fdba74;
+}
+
+.uvBadge[data-level='very-high'] {
+  background: #fca5a5;
+}
+
+.uvBadge[data-level='extreme'] {
+  background: #d8b4fe;
+}
+
+@media (min-width: 540px) {
+  .details {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

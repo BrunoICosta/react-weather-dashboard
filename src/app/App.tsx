@@ -1,6 +1,12 @@
+import { useState } from 'react'
+import { DEFAULT_PLACE } from '@/core/constants'
+import type { Place } from '@/core/types/place'
+import { WeatherDashboard } from '@/features/weather/components/WeatherDashboard'
 import styles from './App.module.css'
 
 export function App() {
+  const [place] = useState<Place>(DEFAULT_PLACE)
+
   return (
     <div className={styles.app}>
       <a className="skip-link" href="#conteudo">
@@ -15,7 +21,7 @@ export function App() {
       </header>
 
       <main id="conteudo" className={styles.main} tabIndex={-1}>
-        <p>Em construção.</p>
+        <WeatherDashboard place={place} />
       </main>
 
       <footer className={styles.footer}>
