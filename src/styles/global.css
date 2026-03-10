@@ -16,6 +16,7 @@
   --bg: linear-gradient(160deg, #7dd3fc 0%, #bae6fd 45%, #f0f9ff 100%);
   --surface: rgb(255 255 255 / 0.62);
   --surface-strong: rgb(255 255 255 / 0.85);
+  --surface-solid: #ffffff;
   --border: rgb(15 23 42 / 0.08);
   --text: #0f172a;
   --text-muted: #334155;
