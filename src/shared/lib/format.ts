@@ -1,5 +1,11 @@
 const integer = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 })
 const oneDecimal = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 })
+const twoDecimals = new Intl.NumberFormat('pt-BR', {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+})
+
+const formatDecimal2 = (value: number) => twoDecimals.format(value)
 
 export function formatInteger(value: number): string {
   // Avoids rendering "-0" for values like -0.3.
@@ -47,6 +53,13 @@ export function getUvLevel(index: number): UvLevel {
   if (index < 8) return { label: 'Alto', level: 'high' }
   if (index < 11) return { label: 'Muito alto', level: 'very-high' }
   return { label: 'Extremo', level: 'extreme' }
+}
+
+/** Formats coordinates as `23,55° S, 46,64° O` (pt-BR hemispheres). */
+export function formatCoordinates(latitude: number, longitude: number): string {
+  const lat = `${formatDecimal2(Math.abs(latitude))}° ${latitude < 0 ? 'S' : 'N'}`
+  const lon = `${formatDecimal2(Math.abs(longitude))}° ${longitude < 0 ? 'O' : 'L'}`
+  return `${lat}, ${lon}`
 }
 
 /** Extracts `HH:mm` from a local ISO date-time without going through `Date` (no timezone shift). */

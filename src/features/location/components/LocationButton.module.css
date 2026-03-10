@@ -1,0 +1,104 @@
+.wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  justify-content: center;
+  padding: var(--space-2) var(--space-3);
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-strong);
+  box-shadow: var(--shadow);
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.button:hover:not(:disabled) {
+  background: var(--surface-solid);
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.button[aria-busy='true'] .icon {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--accent);
+}
+
+.label {
+  /* Visually hidden on small screens but still the button's accessible name. */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.error {
+  position: absolute;
+  z-index: 30;
+  right: 0;
+  top: calc(100% + var(--space-2));
+  width: min(20rem, calc(100vw - 2rem));
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: #fef2f2;
+  color: #7f1d1d;
+  border: 1px solid #fecaca;
+  box-shadow: 0 18px 40px -16px rgb(15 23 42 / 0.45);
+  font-size: 0.875rem;
+}
+
+.error p {
+  margin: 0;
+  flex: 1;
+}
+
+.dismiss {
+  border: 0;
+  background: transparent;
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 0 var(--space-1);
+  color: inherit;
+}
+
+@media (min-width: 640px) {
+  .label {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.35;
+  }
+}

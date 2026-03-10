@@ -1,4 +1,5 @@
 import { buildUrl, fetchJson } from '@/core/api/http'
+import type { Coordinates } from '@/core/types/place'
 import type { Forecast } from '../types'
 import { mapForecast } from './mapForecast'
 
@@ -48,11 +49,6 @@ export interface ForecastResponse {
   > &
     Series<'precipitation_probability_max', number | null> &
     Series<'sunrise' | 'sunset', string>
-}
-
-export interface Coordinates {
-  latitude: number
-  longitude: number
 }
 
 /**

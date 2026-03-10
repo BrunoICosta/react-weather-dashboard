@@ -1,10 +1,13 @@
+export interface Coordinates {
+  latitude: number
+  longitude: number
+}
+
 /** A geographic location the dashboard can show the weather for. */
-export interface Place {
+export interface Place extends Coordinates {
   /** Stable identifier: the geocoding id, or a coordinate-based id for the device location. */
   id: string
   name: string
-  latitude: number
-  longitude: number
   /** State / region (e.g. "São Paulo"). */
   region?: string
   country?: string

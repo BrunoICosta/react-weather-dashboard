@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { DEFAULT_PLACE } from '@/core/constants'
 import type { Place } from '@/core/types/place'
+import { LocationButton } from '@/features/location/components/LocationButton'
 import { CitySearch } from '@/features/search/components/CitySearch'
 import { WeatherDashboard } from '@/features/weather/components/WeatherDashboard'
 import styles from './App.module.css'
@@ -21,6 +22,7 @@ export function App() {
         </div>
         <div className={styles.toolbar}>
           <CitySearch onSelect={setPlace} />
+          <LocationButton onLocate={setPlace} />
         </div>
       </header>
 

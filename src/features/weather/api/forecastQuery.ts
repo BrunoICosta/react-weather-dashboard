@@ -1,5 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
-import { fetchForecast, type Coordinates } from './forecastApi'
+import type { Coordinates } from '@/core/types/place'
+import { fetchForecast } from './forecastApi'
 
 const MINUTE = 60_000
 

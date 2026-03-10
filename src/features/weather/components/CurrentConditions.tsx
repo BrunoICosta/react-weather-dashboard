@@ -1,5 +1,6 @@
 import type { Place } from '@/core/types/place'
 import {
+  formatCoordinates,
   formatLocalTime,
   formatPercent,
   formatPrecipitation,
@@ -22,7 +23,9 @@ interface CurrentConditionsProps {
 export function CurrentConditions({ place, current, today }: CurrentConditionsProps) {
   const description = getWeatherDescription(current.weatherCode)
   const uv = getUvLevel(current.uvIndex)
-  const subtitle = [place.region, place.country].filter(Boolean).join(', ')
+  const subtitle = place.isCurrentLocation
+    ? formatCoordinates(place.latitude, place.longitude)
+    : [place.region, place.country].filter(Boolean).join(', ')
 
   return (
     <section className={styles.card} aria-labelledby="current-title">
