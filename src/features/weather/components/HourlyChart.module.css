@@ -1,0 +1,94 @@
+.charts {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.chartLabel {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.chartLabel + * {
+  margin-bottom: var(--space-2);
+}
+
+.empty {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.tooltip {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 28px -12px rgb(15 23 42 / 0.4);
+  font-size: 0.8125rem;
+  color: var(--text);
+}
+
+.tooltip p {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.tooltipTitle {
+  font-weight: 700;
+}
+
+.keyTemperature,
+.keyPrecipitation {
+  display: inline-block;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 2px;
+}
+
+.keyTemperature {
+  background: var(--chart-temperature);
+}
+
+.keyPrecipitation {
+  background: var(--chart-precipitation);
+}
+
+.tableToggle {
+  margin-top: var(--space-3);
+  font-size: 0.875rem;
+}
+
+.tableToggle summary {
+  width: fit-content;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent);
+  border-radius: var(--radius-sm);
+}
+
+.tableWrapper {
+  margin-top: var(--space-2);
+  max-height: 18rem;
+  overflow: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: var(--space-1) var(--space-2);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--surface-solid);
+}

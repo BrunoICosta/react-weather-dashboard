@@ -24,6 +24,12 @@
   --focus: #1d4ed8;
   --shadow: 0 10px 30px -12px rgb(15 23 42 / 0.25);
 
+  /* Chart series (validated for CVD separation and contrast on light and dark surfaces). */
+  --chart-temperature: #ea580c;
+  --chart-precipitation: #2563eb;
+  --chart-grid: rgb(15 23 42 / 0.1);
+  --chart-cursor: rgb(15 23 42 / 0.06);
+
   font-family: var(--font-sans);
   line-height: 1.5;
   color: var(--text);

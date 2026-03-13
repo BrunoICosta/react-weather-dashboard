@@ -62,6 +62,11 @@ export function formatCoordinates(latitude: number, longitude: number): string {
   return `${lat}, ${lon}`
 }
 
+/** `2026-03-05T15:00` → `15h`. */
+export function formatHour(isoDateTime: string): string {
+  return `${isoDateTime.slice(11, 13)}h`
+}
+
 /** Extracts `HH:mm` from a local ISO date-time without going through `Date` (no timezone shift). */
 export function formatLocalTime(isoDateTime: string): string {
   return isoDateTime.slice(11, 16)
