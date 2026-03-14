@@ -4,11 +4,10 @@ import {
   formatLocalTime,
   formatPercent,
   formatPrecipitation,
-  formatTemperature,
-  formatWindSpeed,
   getUvLevel,
   toCompassPoint,
 } from '@/shared/lib/format'
+import { useUnits } from '@/features/settings/units/unitsContext'
 import { getWeatherDescription } from '../lib/weatherCodes'
 import type { CurrentWeather, DailyPoint } from '../types'
 import styles from './CurrentConditions.module.css'
@@ -21,6 +20,7 @@ interface CurrentConditionsProps {
 }
 
 export function CurrentConditions({ place, current, today }: CurrentConditionsProps) {
+  const { formatTemperature, formatWindSpeed } = useUnits()
   const description = getWeatherDescription(current.weatherCode)
   const uv = getUvLevel(current.uvIndex)
   const subtitle = place.isCurrentLocation

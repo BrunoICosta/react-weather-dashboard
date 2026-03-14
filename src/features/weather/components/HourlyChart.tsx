@@ -11,7 +11,8 @@ import {
   type TooltipContentProps,
 } from 'recharts'
 import { Card } from '@/shared/components/Card'
-import { formatHour, formatPercent, formatTemperature } from '@/shared/lib/format'
+import { useUnits } from '@/features/settings/units/unitsContext'
+import { formatDegrees, formatHour, formatPercent } from '@/shared/lib/format'
 import { getWeatherDescription } from '../lib/weatherCodes'
 import type { HourlyPoint } from '../types'
 import styles from './HourlyChart.module.css'
@@ -23,6 +24,7 @@ interface HourlyChartProps {
 interface ChartDatum {
   time: string
   hour: string
+  /** Already converted to the selected unit. */
   temperature: number
   precipitation: number
   description: string
@@ -32,11 +34,14 @@ const SYNC_ID = 'hourly-forecast'
 const AXIS_TICK = { fill: 'var(--text-muted)', fontSize: 12 }
 const CHART_MARGIN = { top: 8, right: 8, bottom: 0, left: 0 }
 
-function toChartData(points: HourlyPoint[]): ChartDatum[] {
+function toChartData(
+  points: HourlyPoint[],
+  toTemperature: (celsius: number) => number,
+): ChartDatum[] {
   return points.map((point) => ({
     time: point.time,
     hour: formatHour(point.time),
-    temperature: Math.round(point.temperature * 10) / 10,
+    temperature: Math.round(toTemperature(point.temperature) * 10) / 10,
     precipitation: point.precipitationProbability,
     description: getWeatherDescription(point.weatherCode),
   }))
@@ -50,7 +55,7 @@ function HourlyTooltip({ active, payload }: TooltipContentProps<number, string>)
       <p className={styles.tooltipTitle}>{datum.hour}</p>
       <p>
         <span className={styles.keyTemperature} aria-hidden="true" />
-        {formatTemperature(datum.temperature)} · {datum.description}
+        {formatDegrees(datum.temperature)} · {datum.description}
       </p>
       <p>
         <span className={styles.keyPrecipitation} aria-hidden="true" />
@@ -61,7 +66,8 @@ function HourlyTooltip({ active, payload }: TooltipContentProps<number, string>)
 }
 
 export function HourlyChart({ points }: HourlyChartProps) {
-  const data = toChartData(points)
+  const { toTemperature } = useUnits()
+  const data = toChartData(points, toTemperature)
 
   if (data.length === 0) {
     return (
@@ -168,7 +174,7 @@ export function HourlyChart({ points }: HourlyChartProps) {
               {data.map((datum) => (
                 <tr key={datum.time}>
                   <th scope="row">{datum.hour}</th>
-                  <td>{formatTemperature(datum.temperature)}</td>
+                  <td>{formatDegrees(datum.temperature)}</td>
                   <td>{formatPercent(datum.precipitation)}</td>
                   <td>{datum.description}</td>
                 </tr>

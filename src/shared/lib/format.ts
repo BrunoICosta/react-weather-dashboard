@@ -21,12 +21,9 @@ export function formatPercent(value: number): string {
   return `${formatInteger(value)}%`
 }
 
-export function formatTemperature(celsius: number): string {
-  return `${formatInteger(celsius)}°`
-}
-
-export function formatWindSpeed(kmh: number): string {
-  return `${formatInteger(kmh)} km/h`
+/** Formats an already converted temperature as `27°`. */
+export function formatDegrees(value: number): string {
+  return `${formatInteger(value)}°`
 }
 
 export function formatPrecipitation(mm: number): string {

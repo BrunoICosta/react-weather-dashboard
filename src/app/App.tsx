@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { DEFAULT_PLACE } from '@/core/constants'
 import type { Place } from '@/core/types/place'
+import { UnitToggle } from '@/features/settings/components/UnitToggle'
 import { LocationButton } from '@/features/location/components/LocationButton'
 import { CitySearch } from '@/features/search/components/CitySearch'
 import { WeatherDashboard } from '@/features/weather/components/WeatherDashboard'
@@ -23,6 +24,9 @@ export function App() {
         <div className={styles.toolbar}>
           <CitySearch onSelect={setPlace} />
           <LocationButton onLocate={setPlace} />
+        </div>
+        <div className={styles.units}>
+          <UnitToggle />
         </div>
       </header>
 

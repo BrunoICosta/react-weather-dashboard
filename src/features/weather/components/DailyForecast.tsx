@@ -1,11 +1,7 @@
 import type { CSSProperties } from 'react'
 import { Card } from '@/shared/components/Card'
-import {
-  formatLongDate,
-  formatPercent,
-  formatTemperature,
-  formatWeekday,
-} from '@/shared/lib/format'
+import { useUnits } from '@/features/settings/units/unitsContext'
+import { formatLongDate, formatPercent, formatWeekday } from '@/shared/lib/format'
 import { getWeatherDescription } from '../lib/weatherCodes'
 import type { DailyPoint } from '../types'
 import styles from './DailyForecast.module.css'
@@ -16,6 +12,8 @@ interface DailyForecastProps {
 }
 
 export function DailyForecast({ days }: DailyForecastProps) {
+  const { formatTemperature } = useUnits()
+
   if (days.length === 0) {
     return (
       <Card title="Próximos 7 dias">
