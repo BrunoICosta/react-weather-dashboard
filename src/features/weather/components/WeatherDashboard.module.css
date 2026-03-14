@@ -2,9 +2,37 @@
   display: grid;
   gap: var(--space-4);
   grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'current'
+    'hourly'
+    'daily';
 }
 
 .current,
-.hourly {
+.hourly,
+.daily {
   min-width: 0;
+}
+
+.current {
+  grid-area: current;
+}
+
+.hourly {
+  grid-area: hourly;
+}
+
+.daily {
+  grid-area: daily;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    gap: var(--space-5);
+    grid-template-columns: minmax(0, 1.75fr) minmax(20rem, 1fr);
+    grid-template-areas:
+      'current daily'
+      'hourly daily';
+    align-items: start;
+  }
 }

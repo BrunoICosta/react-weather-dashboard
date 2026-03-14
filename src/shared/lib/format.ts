@@ -62,6 +62,31 @@ export function formatCoordinates(latitude: number, longitude: number): string {
   return `${lat}, ${lon}`
 }
 
+/** Parses a local ISO date (`2026-03-05`) as UTC midnight so formatting never shifts the day. */
+function parseLocalDate(isoDate: string): Date {
+  const [year, month, day] = isoDate.slice(0, 10).split('-').map(Number)
+  return new Date(Date.UTC(year, month - 1, day))
+}
+
+const weekdayFormat = new Intl.DateTimeFormat('pt-BR', { weekday: 'short', timeZone: 'UTC' })
+const longDateFormat = new Intl.DateTimeFormat('pt-BR', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+  timeZone: 'UTC',
+})
+
+/** `2026-03-05` → `Qui` */
+export function formatWeekday(isoDate: string): string {
+  const weekday = weekdayFormat.format(parseLocalDate(isoDate)).replace('.', '')
+  return weekday.charAt(0).toLocaleUpperCase('pt-BR') + weekday.slice(1)
+}
+
+/** `2026-03-05` → `quinta-feira, 5 de março` */
+export function formatLongDate(isoDate: string): string {
+  return longDateFormat.format(parseLocalDate(isoDate))
+}
+
 /** `2026-03-05T15:00` → `15h`. */
 export function formatHour(isoDateTime: string): string {
   return `${isoDateTime.slice(11, 13)}h`

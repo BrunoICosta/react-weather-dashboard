@@ -1,6 +1,7 @@
 import type { Place } from '@/core/types/place'
 import { useForecast } from '../hooks/useForecast'
 import { CurrentConditions } from './CurrentConditions'
+import { DailyForecast } from './DailyForecast'
 import { HourlyChart } from './HourlyChart'
 import styles from './WeatherDashboard.module.css'
 
@@ -33,6 +34,9 @@ export function WeatherDashboard({ place }: WeatherDashboardProps) {
       </div>
       <div className={styles.hourly}>
         <HourlyChart points={data.hourly} />
+      </div>
+      <div className={styles.daily}>
+        <DailyForecast days={data.daily} />
       </div>
     </div>
   )

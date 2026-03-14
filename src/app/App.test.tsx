@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { renderWithProviders } from '@/test/render'
 import { App } from './App'
@@ -8,7 +8,8 @@ describe('App', () => {
     renderWithProviders(<App />)
 
     expect(screen.getByRole('heading', { level: 1, name: 'Clima' })).toBeInTheDocument()
-    expect(await screen.findByRole('heading', { name: 'São Paulo' })).toBeInTheDocument()
-    expect(screen.getByText('Parcialmente nublado')).toBeInTheDocument()
+    const current = await screen.findByRole('region', { name: 'São Paulo' })
+    expect(within(current).getByText('Parcialmente nublado')).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Próximos 7 dias' })).toBeInTheDocument()
   })
 })
