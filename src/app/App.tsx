@@ -1,16 +1,19 @@
-import { useState } from 'react'
 import { DEFAULT_PLACE } from '@/core/constants'
+import { isPlace } from '@/core/types/isPlace'
 import type { Place } from '@/core/types/place'
+import { SavedCities } from '@/features/cities/components/SavedCities'
 import { SaveCityButton } from '@/features/cities/components/SaveCityButton'
 import { useSavedCities } from '@/features/cities/hooks/useSavedCities'
 import { UnitToggle } from '@/features/settings/components/UnitToggle'
 import { LocationButton } from '@/features/location/components/LocationButton'
 import { CitySearch } from '@/features/search/components/CitySearch'
 import { WeatherDashboard } from '@/features/weather/components/WeatherDashboard'
+import { useLocalStorage } from '@/shared/hooks/useLocalStorage'
 import styles from './App.module.css'
 
 export function App() {
-  const [place, setPlace] = useState<Place>(DEFAULT_PLACE)
+  // The last viewed place is restored on the next visit.
+  const [place, setPlace] = useLocalStorage<Place>('last-place', DEFAULT_PLACE, isPlace)
   const savedCities = useSavedCities()
   const saved = savedCities.isSaved(place.id)
 
@@ -35,6 +38,12 @@ export function App() {
       </header>
 
       <main id="conteudo" className={styles.main} tabIndex={-1}>
+        <SavedCities
+          cities={savedCities.cities}
+          selectedId={place.id}
+          onSelect={setPlace}
+          onRemove={savedCities.remove}
+        />
         <WeatherDashboard
           place={place}
           placeAction={

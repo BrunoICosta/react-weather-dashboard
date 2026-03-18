@@ -43,6 +43,9 @@
 
 .main {
   flex: 1;
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
   outline: none;
 }
 
