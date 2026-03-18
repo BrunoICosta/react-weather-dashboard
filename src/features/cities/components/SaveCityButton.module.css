@@ -1,0 +1,27 @@
+.button {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface-strong);
+  transition: transform 0.15s ease;
+}
+
+.button:hover {
+  transform: scale(1.06);
+}
+
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: var(--text-muted);
+}
+
+.button[aria-pressed='true'] .icon {
+  fill: #facc15;
+  stroke: #ca8a04;
+}

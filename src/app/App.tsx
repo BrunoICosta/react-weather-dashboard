@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { DEFAULT_PLACE } from '@/core/constants'
 import type { Place } from '@/core/types/place'
+import { SaveCityButton } from '@/features/cities/components/SaveCityButton'
+import { useSavedCities } from '@/features/cities/hooks/useSavedCities'
 import { UnitToggle } from '@/features/settings/components/UnitToggle'
 import { LocationButton } from '@/features/location/components/LocationButton'
 import { CitySearch } from '@/features/search/components/CitySearch'
@@ -9,6 +11,8 @@ import styles from './App.module.css'
 
 export function App() {
   const [place, setPlace] = useState<Place>(DEFAULT_PLACE)
+  const savedCities = useSavedCities()
+  const saved = savedCities.isSaved(place.id)
 
   return (
     <div className={styles.app}>
@@ -31,7 +35,18 @@ export function App() {
       </header>
 
       <main id="conteudo" className={styles.main} tabIndex={-1}>
-        <WeatherDashboard place={place} />
+        <WeatherDashboard
+          place={place}
+          placeAction={
+            !place.isCurrentLocation && (
+              <SaveCityButton
+                cityName={place.name}
+                saved={saved}
+                onToggle={() => (saved ? savedCities.remove(place.id) : savedCities.save(place))}
+              />
+            )
+          }
+        />
       </main>
 
       <footer className={styles.footer}>

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { Place } from '@/core/types/place'
 import {
   formatCoordinates,
@@ -17,9 +18,11 @@ interface CurrentConditionsProps {
   place: Place
   current: CurrentWeather
   today?: DailyPoint
+  /** Extra control rendered next to the place name (e.g. a "save city" button). */
+  action?: ReactNode
 }
 
-export function CurrentConditions({ place, current, today }: CurrentConditionsProps) {
+export function CurrentConditions({ place, current, today, action }: CurrentConditionsProps) {
   const { formatTemperature, formatWindSpeed } = useUnits()
   const description = getWeatherDescription(current.weatherCode)
   const uv = getUvLevel(current.uvIndex)
@@ -31,9 +34,12 @@ export function CurrentConditions({ place, current, today }: CurrentConditionsPr
     <section className={styles.card} aria-labelledby="current-title">
       <div className={styles.top}>
         <div>
-          <h2 id="current-title" className={styles.place}>
-            {place.name}
-          </h2>
+          <div className={styles.heading}>
+            <h2 id="current-title" className={styles.place}>
+              {place.name}
+            </h2>
+            {action}
+          </div>
           {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
           <p className={styles.updated}>
             Atualizado às <time>{formatLocalTime(current.time)}</time> (horário local)

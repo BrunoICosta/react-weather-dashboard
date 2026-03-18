@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { Place } from '@/core/types/place'
 import { useForecast } from '../hooks/useForecast'
 import { CurrentConditions } from './CurrentConditions'
@@ -7,9 +8,10 @@ import styles from './WeatherDashboard.module.css'
 
 interface WeatherDashboardProps {
   place: Place
+  placeAction?: ReactNode
 }
 
-export function WeatherDashboard({ place }: WeatherDashboardProps) {
+export function WeatherDashboard({ place, placeAction }: WeatherDashboardProps) {
   const { data, isPending, isError, error, refetch } = useForecast(place)
 
   if (isPending) {
@@ -30,7 +32,12 @@ export function WeatherDashboard({ place }: WeatherDashboardProps) {
   return (
     <div className={styles.grid}>
       <div className={styles.current}>
-        <CurrentConditions place={place} current={data.current} today={data.daily[0]} />
+        <CurrentConditions
+          place={place}
+          current={data.current}
+          today={data.daily[0]}
+          action={placeAction}
+        />
       </div>
       <div className={styles.hourly}>
         <HourlyChart points={data.hourly} />
