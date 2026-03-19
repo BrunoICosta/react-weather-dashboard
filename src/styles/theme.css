@@ -1,0 +1,76 @@
+/*
+ * Weather-driven themes. `<html>` receives data-scene / data-period / data-tone from
+ * `applyWeatherTheme`; the light tokens in global.css are the default (clear day).
+ */
+
+/* ---------- Backgrounds ---------- */
+
+:root[data-scene='clear'][data-period='day'] {
+  --bg: linear-gradient(165deg, #38bdf8 0%, #7dd3fc 35%, #e0f2fe 100%);
+}
+
+:root[data-scene='clear'][data-period='night'] {
+  --bg: linear-gradient(165deg, #0b1026 0%, #1e1b4b 55%, #312e81 100%);
+}
+
+:root[data-scene='cloudy'][data-period='day'] {
+  --bg: linear-gradient(165deg, #94a3b8 0%, #cbd5e1 45%, #f1f5f9 100%);
+}
+
+:root[data-scene='cloudy'][data-period='night'] {
+  --bg: linear-gradient(165deg, #0f172a 0%, #1e293b 55%, #334155 100%);
+}
+
+:root[data-scene='fog'][data-period='day'] {
+  --bg: linear-gradient(180deg, #cbd5e1 0%, #e2e8f0 50%, #f8fafc 100%);
+}
+
+:root[data-scene='fog'][data-period='night'] {
+  --bg: linear-gradient(180deg, #1f2937 0%, #374151 60%, #4b5563 100%);
+}
+
+:root[data-scene='rain'][data-period='day'] {
+  --bg: linear-gradient(165deg, #64748b 0%, #94a3b8 45%, #cbd5e1 100%);
+}
+
+:root[data-scene='rain'][data-period='night'] {
+  --bg: linear-gradient(165deg, #020617 0%, #0f172a 50%, #1e3a5f 100%);
+}
+
+:root[data-scene='storm'] {
+  --bg: linear-gradient(165deg, #1e1b2e 0%, #312e45 50%, #475569 100%);
+}
+
+:root[data-scene='storm'][data-period='night'] {
+  --bg: linear-gradient(165deg, #110f1c 0%, #1e1b2e 55%, #334155 100%);
+}
+
+:root[data-scene='snow'][data-period='day'] {
+  --bg: linear-gradient(180deg, #e2e8f0 0%, #f8fafc 55%, #ffffff 100%);
+}
+
+:root[data-scene='snow'][data-period='night'] {
+  --bg: linear-gradient(180deg, #1e293b 0%, #334155 60%, #64748b 100%);
+}
+
+/* ---------- Dark tone (night and storms) ---------- */
+
+:root[data-tone='dark'] {
+  color-scheme: dark;
+
+  --surface: rgb(15 23 42 / 0.55);
+  --surface-strong: rgb(30 41 59 / 0.78);
+  --surface-solid: #1e293b;
+  --border: rgb(255 255 255 / 0.1);
+  --text: #f1f5f9;
+  --text-muted: #cbd5e1;
+  --accent: #38bdf8;
+  --on-accent: #0f172a;
+  --focus: #7dd3fc;
+  --shadow: 0 12px 32px -14px rgb(0 0 0 / 0.6);
+
+  --chart-temperature: #ea580c;
+  --chart-precipitation: #3b82f6;
+  --chart-grid: rgb(255 255 255 / 0.12);
+  --chart-cursor: rgb(255 255 255 / 0.06);
+}

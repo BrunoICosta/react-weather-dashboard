@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import type { Place } from '@/core/types/place'
+import { useWeatherTheme } from '@/features/theme/useWeatherTheme'
 import { useForecast } from '../hooks/useForecast'
 import { CurrentConditions } from './CurrentConditions'
 import { DailyForecast } from './DailyForecast'
@@ -13,6 +14,7 @@ interface WeatherDashboardProps {
 
 export function WeatherDashboard({ place, placeAction }: WeatherDashboardProps) {
   const { data, isPending, isError, error, refetch } = useForecast(place)
+  useWeatherTheme(data?.current.weatherCode, data?.current.isDay)
 
   if (isPending) {
     return <p role="status">Carregando previsão…</p>
