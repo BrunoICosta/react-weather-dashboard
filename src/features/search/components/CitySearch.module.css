@@ -79,8 +79,13 @@
   cursor: pointer;
 }
 
+.option:hover,
 .option[aria-selected='true'] {
   background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.option[aria-selected='true'] {
+  box-shadow: inset 3px 0 0 var(--accent);
 }
 
 .optionName {

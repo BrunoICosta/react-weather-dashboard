@@ -45,3 +45,9 @@
   outline: 3px solid var(--focus);
   outline-offset: 1px;
 }
+
+@media (max-width: 400px) {
+  .label {
+    padding: 0 var(--space-2);
+  }
+}
