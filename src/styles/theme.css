@@ -73,4 +73,7 @@
   --chart-precipitation: #3b82f6;
   --chart-grid: rgb(255 255 255 / 0.12);
   --chart-cursor: rgb(255 255 255 / 0.06);
+
+  --skeleton-base: rgb(255 255 255 / 0.06);
+  --skeleton-highlight: rgb(255 255 255 / 0.14);
 }

@@ -1,3 +1,4 @@
+import { QueryErrorResetBoundary } from '@tanstack/react-query'
 import { DEFAULT_PLACE } from '@/core/constants'
 import { isPlace } from '@/core/types/isPlace'
 import type { Place } from '@/core/types/place'
@@ -8,6 +9,8 @@ import { UnitToggle } from '@/features/settings/components/UnitToggle'
 import { LocationButton } from '@/features/location/components/LocationButton'
 import { CitySearch } from '@/features/search/components/CitySearch'
 import { WeatherDashboard } from '@/features/weather/components/WeatherDashboard'
+import { ErrorBoundary } from '@/shared/components/ErrorBoundary'
+import { ErrorState } from '@/shared/components/ErrorState'
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage'
 import styles from './App.module.css'
 
@@ -44,18 +47,36 @@ export function App() {
           onSelect={setPlace}
           onRemove={savedCities.remove}
         />
-        <WeatherDashboard
-          place={place}
-          placeAction={
-            !place.isCurrentLocation && (
-              <SaveCityButton
-                cityName={place.name}
-                saved={saved}
-                onToggle={() => (saved ? savedCities.remove(place.id) : savedCities.save(place))}
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <ErrorBoundary
+              onReset={reset}
+              resetKeys={[place.id]}
+              fallback={({ reset: retry }) => (
+                <ErrorState
+                  title="Algo deu errado ao exibir a previsão"
+                  message="Tente novamente ou escolha outra cidade."
+                  onRetry={retry}
+                />
+              )}
+            >
+              <WeatherDashboard
+                place={place}
+                placeAction={
+                  !place.isCurrentLocation && (
+                    <SaveCityButton
+                      cityName={place.name}
+                      saved={saved}
+                      onToggle={() =>
+                        saved ? savedCities.remove(place.id) : savedCities.save(place)
+                      }
+                    />
+                  )
+                }
               />
-            )
-          }
-        />
+            </ErrorBoundary>
+          )}
+        </QueryErrorResetBoundary>
       </main>
 
       <footer className={styles.footer}>

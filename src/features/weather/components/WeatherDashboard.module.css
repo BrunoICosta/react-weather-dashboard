@@ -26,6 +26,30 @@
   grid-area: daily;
 }
 
+.skeletonStack {
+  display: grid;
+  gap: var(--space-3);
+  flex: 1;
+}
+
+.skeletonRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.skeletonDetails {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+@media (min-width: 540px) {
+  .skeletonDetails {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
 @media (min-width: 1024px) {
   .grid {
     gap: var(--space-5);

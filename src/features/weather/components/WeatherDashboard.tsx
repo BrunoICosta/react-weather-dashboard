@@ -1,10 +1,12 @@
 import type { ReactNode } from 'react'
 import type { Place } from '@/core/types/place'
 import { useWeatherTheme } from '@/features/theme/useWeatherTheme'
+import { ErrorState } from '@/shared/components/ErrorState'
 import { useForecast } from '../hooks/useForecast'
 import { CurrentConditions } from './CurrentConditions'
 import { DailyForecast } from './DailyForecast'
 import { HourlyChart } from './HourlyChart'
+import { WeatherDashboardSkeleton } from './WeatherDashboardSkeleton'
 import styles from './WeatherDashboard.module.css'
 
 interface WeatherDashboardProps {
@@ -13,21 +15,19 @@ interface WeatherDashboardProps {
 }
 
 export function WeatherDashboard({ place, placeAction }: WeatherDashboardProps) {
-  const { data, isPending, isError, error, refetch } = useForecast(place)
+  const { data, isPending, isError, error, refetch, isFetching } = useForecast(place)
   useWeatherTheme(data?.current.weatherCode, data?.current.isDay)
 
-  if (isPending) {
-    return <p role="status">Carregando previsão…</p>
-  }
+  if (isPending) return <WeatherDashboardSkeleton />
 
   if (isError) {
     return (
-      <div role="alert">
-        <p>Não foi possível carregar a previsão. {error.message}</p>
-        <button type="button" onClick={() => void refetch()}>
-          Tentar novamente
-        </button>
-      </div>
+      <ErrorState
+        title="Não foi possível carregar a previsão"
+        message={error.message}
+        onRetry={() => void refetch()}
+        retrying={isFetching}
+      />
     )
   }
 
