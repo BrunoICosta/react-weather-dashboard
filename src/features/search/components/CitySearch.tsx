@@ -16,7 +16,14 @@ export function CitySearch({ onSelect }: CitySearchProps) {
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
-  const { data: places = [], isFetching, isError, term, enabled } = usePlaceSearch(query)
+  const {
+    data: places = [],
+    isFetching,
+    isError,
+    isPlaceholderData,
+    term,
+    enabled,
+  } = usePlaceSearch(query)
 
   const inputId = useId()
   const listboxId = useId()
@@ -26,6 +33,8 @@ export function CitySearch({ onSelect }: CitySearchProps) {
   const searchable = query.trim().length >= MIN_QUERY_LENGTH
   const showList = open && searchable && enabled
   const loading = searchable && (typing || isFetching)
+  // Suggestions still belong to the previous term while the debounce/request is pending.
+  const stale = typing || isPlaceholderData
 
   function select(place: Place) {
     onSelect(place)
@@ -48,7 +57,9 @@ export function CitySearch({ onSelect }: CitySearchProps) {
         )
         break
       case 'Enter': {
-        const place = places[activeIndex] ?? (showList ? places[0] : undefined)
+        // An explicitly highlighted option is always honoured; the implicit "first result"
+        // shortcut only applies once the list matches what is in the field.
+        const place = places[activeIndex] ?? (showList && !stale ? places[0] : undefined)
         if (place) {
           event.preventDefault()
           select(place)
@@ -115,6 +126,7 @@ export function CitySearch({ onSelect }: CitySearchProps) {
         role="listbox"
         aria-label="Cidades encontradas"
         className={styles.listbox}
+        data-stale={stale || undefined}
         hidden={!showList || places.length === 0}
       >
         {places.map((place, index) => (

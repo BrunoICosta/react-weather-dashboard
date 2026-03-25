@@ -54,6 +54,22 @@ describe('CitySearch', () => {
     expect(input).toHaveAttribute('aria-expanded', 'false')
   })
 
+  it('picks the first suggestion on Enter, but not while results are stale', async () => {
+    const onSelect = vi.fn()
+    const { user } = renderWithProviders(<CitySearch onSelect={onSelect} />)
+    const input = screen.getByRole('combobox')
+
+    await user.type(input, 'curi')
+    await screen.findAllByRole('option')
+    // Typing more keeps the old list visible until the debounced search settles.
+    await user.type(input, 'có{Enter}')
+    expect(onSelect).not.toHaveBeenCalled()
+
+    await waitFor(() => expect(screen.getAllByRole('option')).toHaveLength(1))
+    await user.keyboard('{Enter}')
+    expect(onSelect).toHaveBeenCalledWith(expect.objectContaining({ name: 'Curicó' }))
+  })
+
   it('selects a city with the mouse', async () => {
     const onSelect = vi.fn()
     const { user } = renderWithProviders(<CitySearch onSelect={onSelect} />)
