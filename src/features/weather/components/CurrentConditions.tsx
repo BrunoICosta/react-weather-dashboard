@@ -1,5 +1,6 @@
-import type { ReactNode } from 'react'
+import { useId, type ReactNode } from 'react'
 import type { Place } from '@/core/types/place'
+import { Card } from '@/shared/components/Card'
 import {
   formatCoordinates,
   formatLocalTime,
@@ -24,6 +25,7 @@ interface CurrentConditionsProps {
 
 export function CurrentConditions({ place, current, today, action }: CurrentConditionsProps) {
   const { formatTemperature, formatWindSpeed } = useUnits()
+  const titleId = useId()
   const description = getWeatherDescription(current.weatherCode)
   const uv = getUvLevel(current.uvIndex)
   const subtitle = place.isCurrentLocation
@@ -31,11 +33,11 @@ export function CurrentConditions({ place, current, today, action }: CurrentCond
     : [place.region, place.country].filter(Boolean).join(', ')
 
   return (
-    <section className={styles.card} aria-labelledby="current-title">
+    <Card labelledBy={titleId} className={styles.card}>
       <div className={styles.top}>
         <div>
           <div className={styles.heading}>
-            <h2 id="current-title" className={styles.place}>
+            <h2 id={titleId} className={styles.place}>
               {place.name}
             </h2>
             {action}
@@ -100,6 +102,6 @@ export function CurrentConditions({ place, current, today, action }: CurrentCond
           <dd>{formatPrecipitation(current.precipitation)}</dd>
         </div>
       </dl>
-    </section>
+    </Card>
   )
 }
