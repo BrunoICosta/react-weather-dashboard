@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import styles from './ErrorState.module.css'
 
 interface ErrorStateProps {
@@ -8,6 +9,7 @@ interface ErrorStateProps {
 }
 
 export function ErrorState({ title, message, onRetry, retrying = false }: ErrorStateProps) {
+  const { t } = useTranslation()
   return (
     <div className={styles.state} role="alert">
       <svg viewBox="0 0 64 64" width={56} height={56} aria-hidden="true" focusable="false">
@@ -23,7 +25,7 @@ export function ErrorState({ title, message, onRetry, retrying = false }: ErrorS
       {message && <p className={styles.message}>{message}</p>}
       {onRetry && (
         <button type="button" className={styles.retry} onClick={onRetry} disabled={retrying}>
-          {retrying ? 'Tentando…' : 'Tentar novamente'}
+          {retrying ? t('retrying') : t('retry')}
         </button>
       )}
     </div>

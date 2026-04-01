@@ -1,7 +1,8 @@
 import { useId, useState, type KeyboardEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { Place } from '@/core/types/place'
 import { MIN_QUERY_LENGTH } from '../api/geocodingApi'
-import { usePlaceSearch } from '../hooks/usePlaceSearch'
+import { toSearchTerm, usePlaceSearch } from '../hooks/usePlaceSearch'
 import styles from './CitySearch.module.css'
 
 interface CitySearchProps {
@@ -13,6 +14,7 @@ function describePlace(place: Place): string {
 }
 
 export function CitySearch({ onSelect }: CitySearchProps) {
+  const { t } = useTranslation('search')
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
@@ -23,13 +25,14 @@ export function CitySearch({ onSelect }: CitySearchProps) {
     isPlaceholderData,
     term,
     enabled,
+    locale,
   } = usePlaceSearch(query)
 
   const inputId = useId()
   const listboxId = useId()
   const optionId = (index: number) => `${listboxId}-option-${index}`
 
-  const typing = query.trim().toLocaleLowerCase('pt-BR') !== term
+  const typing = toSearchTerm(query, locale) !== term
   const searchable = query.trim().length >= MIN_QUERY_LENGTH
   const showList = open && searchable && enabled
   const loading = searchable && (typing || isFetching)
@@ -80,16 +83,16 @@ export function CitySearch({ onSelect }: CitySearchProps) {
 
   let status = ''
   if (showList) {
-    if (isError) status = 'Erro ao buscar cidades. Tente novamente.'
-    else if (loading && places.length === 0) status = 'Buscando cidades…'
-    else if (!loading && places.length === 0) status = 'Nenhuma cidade encontrada.'
-    else if (!loading) status = `${places.length} cidades encontradas.`
+    if (isError) status = t('error')
+    else if (loading && places.length === 0) status = t('searching')
+    else if (!loading && places.length === 0) status = t('noResults')
+    else if (!loading) status = t('count', { count: places.length })
   }
 
   return (
     <div className={styles.search} role="search">
       <label htmlFor={inputId} className="sr-only">
-        Buscar cidade
+        {t('label')}
       </label>
       <div className={styles.field}>
         <svg className={styles.icon} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -101,7 +104,7 @@ export function CitySearch({ onSelect }: CitySearchProps) {
           className={styles.input}
           type="search"
           role="combobox"
-          placeholder="Buscar cidade…"
+          placeholder={t('placeholder')}
           autoComplete="off"
           spellCheck={false}
           aria-autocomplete="list"
@@ -124,7 +127,7 @@ export function CitySearch({ onSelect }: CitySearchProps) {
       <ul
         id={listboxId}
         role="listbox"
-        aria-label="Cidades encontradas"
+        aria-label={t('results')}
         className={styles.listbox}
         data-stale={stale || undefined}
         hidden={!showList || places.length === 0}

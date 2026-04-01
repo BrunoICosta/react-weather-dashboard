@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { getWeatherInfo, type WeatherCondition } from '../lib/weatherCodes'
+import { getWeatherCondition, type WeatherCondition } from '../lib/weatherCodes'
 
 interface WeatherIconProps {
   code: number
@@ -148,7 +148,7 @@ function renderIcon(condition: WeatherCondition, isDay: boolean): ReactNode {
 }
 
 export function WeatherIcon({ code, isDay = true, size = 48, label, className }: WeatherIconProps) {
-  const { condition } = getWeatherInfo(code)
+  const condition = getWeatherCondition(code)
   const a11y = label ? { role: 'img', 'aria-label': label } : { 'aria-hidden': true }
 
   return (

@@ -6,14 +6,17 @@ export type GeolocationStatus = 'idle' | 'locating' | 'error'
 /** `unknown` when the Permissions API is unavailable (e.g. older Safari). */
 export type GeolocationPermission = PermissionState | 'unknown' | 'unsupported'
 
-const ERROR_MESSAGES: Record<number, string> = {
-  1: 'Permissão de localização negada. Libere o acesso nas configurações do navegador.',
-  2: 'Não foi possível determinar sua localização agora.',
-  3: 'A localização demorou demais para responder. Tente novamente.',
+/** Translated by the UI (`location:errors.<code>`). */
+export type GeolocationErrorCode = 'denied' | 'unavailable' | 'timeout' | 'unsupported' | 'unknown'
+
+const ERROR_CODES: Record<number, GeolocationErrorCode> = {
+  1: 'denied',
+  2: 'unavailable',
+  3: 'timeout',
 }
 
-export function getGeolocationErrorMessage(code: number): string {
-  return ERROR_MESSAGES[code] ?? 'Erro desconhecido ao obter a localização.'
+export function toGeolocationErrorCode(code: number): GeolocationErrorCode {
+  return ERROR_CODES[code] ?? 'unknown'
 }
 
 const POSITION_OPTIONS: PositionOptions = {
@@ -29,7 +32,7 @@ function isSupported(): boolean {
 
 export function useGeolocation() {
   const [status, setStatus] = useState<GeolocationStatus>('idle')
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<GeolocationErrorCode | null>(null)
   const [permission, setPermission] = useState<GeolocationPermission>(() =>
     isSupported() ? 'unknown' : 'unsupported',
   )
@@ -63,7 +66,7 @@ export function useGeolocation() {
   const locate = useCallback((onSuccess: (coordinates: Coordinates) => void) => {
     if (!isSupported()) {
       setStatus('error')
-      setError('Seu navegador não oferece suporte à geolocalização.')
+      setError('unsupported')
       return
     }
 
@@ -78,7 +81,7 @@ export function useGeolocation() {
       (positionError) => {
         if (!mounted.current) return
         setStatus('error')
-        setError(getGeolocationErrorMessage(positionError.code))
+        setError(toGeolocationErrorCode(positionError.code))
       },
       POSITION_OPTIONS,
     )

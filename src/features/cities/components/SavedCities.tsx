@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import type { Place } from '@/core/types/place'
 import { forecastQueryOptions } from '@/features/weather/api/forecastQuery'
 import styles from './SavedCities.module.css'
@@ -11,17 +12,16 @@ interface SavedCitiesProps {
 }
 
 export function SavedCities({ cities, selectedId, onSelect, onRemove }: SavedCitiesProps) {
+  const { t } = useTranslation('cities')
   const queryClient = useQueryClient()
 
   // Warm the cache when the user is about to switch, so the dashboard renders instantly.
   const prefetch = (city: Place) => void queryClient.prefetchQuery(forecastQueryOptions(city))
 
   return (
-    <nav className={styles.nav} aria-label="Cidades salvas">
+    <nav className={styles.nav} aria-label={t('navLabel')}>
       {cities.length === 0 ? (
-        <p className={styles.empty}>
-          Nenhuma cidade salva ainda. Toque na estrela ao lado do nome para salvar.
-        </p>
+        <p className={styles.empty}>{t('empty')}</p>
       ) : (
         <ul className={styles.list}>
           {cities.map((city) => {
@@ -43,7 +43,7 @@ export function SavedCities({ cities, selectedId, onSelect, onRemove }: SavedCit
                   type="button"
                   className={styles.remove}
                   onClick={() => onRemove(city.id)}
-                  aria-label={`Remover ${city.name} das cidades salvas`}
+                  aria-label={t('remove', { name: city.name })}
                 >
                   <span aria-hidden="true">×</span>
                 </button>

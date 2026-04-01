@@ -10,10 +10,11 @@ import {
   YAxis,
   type TooltipContentProps,
 } from 'recharts'
-import { Card } from '@/shared/components/Card'
+import { useTranslation } from 'react-i18next'
 import { useUnits } from '@/features/settings/units/unitsContext'
-import { formatDegrees, formatHour, formatPercent } from '@/shared/lib/format'
-import { getWeatherDescription } from '../lib/weatherCodes'
+import { useFormatters } from '@/i18n/useFormatters'
+import { Card } from '@/shared/components/Card'
+import { useWeatherDescription } from '../lib/weatherCodes'
 import type { HourlyPoint } from '../types'
 import styles from './HourlyChart.module.css'
 
@@ -28,24 +29,15 @@ interface ChartDatum {
   temperature: number
   precipitation: number
   description: string
+  /** Pre-formatted labels in the active language (used by the tooltip and the table). */
+  temperatureLabel: string
+  precipitationLabel: string
+  precipitationSentence: string
 }
 
 const SYNC_ID = 'hourly-forecast'
 const AXIS_TICK = { fill: 'var(--text-muted)', fontSize: 12 }
 const CHART_MARGIN = { top: 8, right: 8, bottom: 0, left: 0 }
-
-function toChartData(
-  points: HourlyPoint[],
-  toTemperature: (celsius: number) => number,
-): ChartDatum[] {
-  return points.map((point) => ({
-    time: point.time,
-    hour: formatHour(point.time),
-    temperature: Math.round(toTemperature(point.temperature) * 10) / 10,
-    precipitation: point.precipitationProbability,
-    description: getWeatherDescription(point.weatherCode),
-  }))
-}
 
 function HourlyTooltip({ active, payload }: TooltipContentProps<number, string>) {
   const datum = payload?.[0]?.payload as ChartDatum | undefined
@@ -55,24 +47,41 @@ function HourlyTooltip({ active, payload }: TooltipContentProps<number, string>)
       <p className={styles.tooltipTitle}>{datum.hour}</p>
       <p>
         <span className={styles.keyTemperature} aria-hidden="true" />
-        {formatDegrees(datum.temperature)} · {datum.description}
+        {datum.temperatureLabel} · {datum.description}
       </p>
       <p>
         <span className={styles.keyPrecipitation} aria-hidden="true" />
-        {formatPercent(datum.precipitation)} de chance de chuva
+        {datum.precipitationSentence}
       </p>
     </div>
   )
 }
 
 export function HourlyChart({ points }: HourlyChartProps) {
+  const { t } = useTranslation('weather', { keyPrefix: 'hourly' })
   const { toTemperature } = useUnits()
-  const data = toChartData(points, toTemperature)
+  const format = useFormatters()
+  const describe = useWeatherDescription()
+
+  const data: ChartDatum[] = points.map((point) => {
+    const temperature = Math.round(toTemperature(point.temperature) * 10) / 10
+    const precipitationLabel = format.percent(point.precipitationProbability)
+    return {
+      time: point.time,
+      hour: format.hour(point.time),
+      temperature,
+      precipitation: point.precipitationProbability,
+      description: describe(point.weatherCode),
+      temperatureLabel: format.degrees(temperature),
+      precipitationLabel,
+      precipitationSentence: t('precipitationValue', { value: precipitationLabel }),
+    }
+  })
 
   if (data.length === 0) {
     return (
-      <Card title="Próximas 24 horas">
-        <p className={styles.empty}>Sem dados horários para este local.</p>
+      <Card title={t('title')}>
+        <p className={styles.empty}>{t('empty')}</p>
       </Card>
     )
   }
@@ -82,11 +91,11 @@ export function HourlyChart({ points }: HourlyChartProps) {
   const max = Math.ceil(Math.max(...temperatures)) + 1
 
   return (
-    <Card title="Próximas 24 horas">
+    <Card title={t('title')}>
       {/* Two stacked charts sharing the time axis instead of one dual-axis chart:
           °C and % have unrelated scales. `syncId` keeps their tooltips aligned. */}
       <div className={styles.charts} aria-hidden="true">
-        <p className={styles.chartLabel}>Temperatura</p>
+        <p className={styles.chartLabel}>{t('temperature')}</p>
         <ResponsiveContainer width="100%" height={170}>
           <AreaChart data={data} syncId={SYNC_ID} margin={CHART_MARGIN}>
             <defs>
@@ -99,7 +108,7 @@ export function HourlyChart({ points }: HourlyChartProps) {
             <XAxis dataKey="hour" hide />
             <YAxis
               domain={[min, max]}
-              tickFormatter={(value: number) => `${value}°`}
+              tickFormatter={(value: number) => format.degrees(value)}
               tick={AXIS_TICK}
               tickLine={false}
               axisLine={false}
@@ -113,7 +122,7 @@ export function HourlyChart({ points }: HourlyChartProps) {
             <Area
               type="monotone"
               dataKey="temperature"
-              name="Temperatura"
+              name={t('temperature')}
               stroke="var(--chart-temperature)"
               strokeWidth={2}
               fill="url(#temperature-fill)"
@@ -124,7 +133,7 @@ export function HourlyChart({ points }: HourlyChartProps) {
           </AreaChart>
         </ResponsiveContainer>
 
-        <p className={styles.chartLabel}>Chance de chuva</p>
+        <p className={styles.chartLabel}>{t('precipitation')}</p>
         <ResponsiveContainer width="100%" height={110}>
           <BarChart data={data} syncId={SYNC_ID} margin={CHART_MARGIN} barCategoryGap={2}>
             <CartesianGrid vertical={false} stroke="var(--chart-grid)" />
@@ -138,7 +147,7 @@ export function HourlyChart({ points }: HourlyChartProps) {
             <YAxis
               domain={[0, 100]}
               ticks={[0, 50, 100]}
-              tickFormatter={(value: number) => `${value}%`}
+              tickFormatter={(value: number) => format.percent(value)}
               tick={AXIS_TICK}
               tickLine={false}
               axisLine={false}
@@ -147,7 +156,7 @@ export function HourlyChart({ points }: HourlyChartProps) {
             <Tooltip content={HourlyTooltip} cursor={{ fill: 'var(--chart-cursor)' }} />
             <Bar
               dataKey="precipitation"
-              name="Chance de chuva"
+              name={t('precipitation')}
               fill="var(--chart-precipitation)"
               radius={[4, 4, 0, 0]}
               maxBarSize={24}
@@ -158,24 +167,24 @@ export function HourlyChart({ points }: HourlyChartProps) {
       </div>
 
       <details className={styles.tableToggle}>
-        <summary>Ver dados em tabela</summary>
+        <summary>{t('showTable')}</summary>
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
-            <caption className="sr-only">Previsão hora a hora para as próximas 24 horas</caption>
+            <caption className="sr-only">{t('tableCaption')}</caption>
             <thead>
               <tr>
-                <th scope="col">Hora</th>
-                <th scope="col">Temperatura</th>
-                <th scope="col">Chance de chuva</th>
-                <th scope="col">Condição</th>
+                <th scope="col">{t('hour')}</th>
+                <th scope="col">{t('temperature')}</th>
+                <th scope="col">{t('precipitation')}</th>
+                <th scope="col">{t('condition')}</th>
               </tr>
             </thead>
             <tbody>
               {data.map((datum) => (
                 <tr key={datum.time}>
                   <th scope="row">{datum.hour}</th>
-                  <td>{formatDegrees(datum.temperature)}</td>
-                  <td>{formatPercent(datum.precipitation)}</td>
+                  <td>{datum.temperatureLabel}</td>
+                  <td>{datum.precipitationLabel}</td>
                   <td>{datum.description}</td>
                 </tr>
               ))}

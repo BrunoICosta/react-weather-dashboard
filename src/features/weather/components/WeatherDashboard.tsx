@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { Place } from '@/core/types/place'
 import { useWeatherTheme } from '@/features/theme/useWeatherTheme'
+import { useErrorMessage } from '@/i18n/useErrorMessage'
 import { ErrorState } from '@/shared/components/ErrorState'
 import { useForecast } from '../hooks/useForecast'
 import { CurrentConditions } from './CurrentConditions'
@@ -15,6 +17,8 @@ interface WeatherDashboardProps {
 }
 
 export function WeatherDashboard({ place, placeAction }: WeatherDashboardProps) {
+  const { t } = useTranslation('weather')
+  const errorMessage = useErrorMessage()
   const { data, isPending, isError, error, refetch, isFetching } = useForecast(place)
   useWeatherTheme(data?.current.weatherCode, data?.current.isDay)
 
@@ -23,8 +27,8 @@ export function WeatherDashboard({ place, placeAction }: WeatherDashboardProps) 
   if (isError) {
     return (
       <ErrorState
-        title="Não foi possível carregar a previsão"
-        message={error.message}
+        title={t('loadError')}
+        message={errorMessage(error)}
         onRetry={() => void refetch()}
         retrying={isFetching}
       />

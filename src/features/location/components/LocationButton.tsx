@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { Place } from '@/core/types/place'
 import { useGeolocation } from '../hooks/useGeolocation'
 import { createCurrentLocationPlace } from '../lib/currentLocationPlace'
@@ -8,6 +9,7 @@ interface LocationButtonProps {
 }
 
 export function LocationButton({ onLocate }: LocationButtonProps) {
+  const { t } = useTranslation('location')
   const { status, error, permission, locate, dismissError } = useGeolocation()
   const locating = status === 'locating'
   const denied = permission === 'denied'
@@ -20,11 +22,7 @@ export function LocationButton({ onLocate }: LocationButtonProps) {
         onClick={() => locate((coordinates) => onLocate(createCurrentLocationPlace(coordinates)))}
         disabled={locating || permission === 'unsupported'}
         aria-busy={locating}
-        title={
-          denied
-            ? 'O acesso à localização está bloqueado neste navegador'
-            : 'Usar minha localização atual'
-        }
+        title={denied ? t('blockedTitle') : t('title')}
       >
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" className={styles.icon}>
           <circle cx="12" cy="12" r="4" fill="currentColor" />
@@ -36,15 +34,15 @@ export function LocationButton({ onLocate }: LocationButtonProps) {
           />
           <circle cx="12" cy="12" r="7.5" fill="none" stroke="currentColor" strokeWidth="2" />
         </svg>
-        <span className={styles.label}>{locating ? 'Localizando…' : 'Minha localização'}</span>
+        <span className={styles.label}>{locating ? t('locating') : t('button')}</span>
       </button>
 
       {error && (
         <div className={styles.error} role="alert">
-          <p>{error}</p>
+          <p>{t(`errors.${error}`)}</p>
           <button type="button" className={styles.dismiss} onClick={dismissError}>
             <span aria-hidden="true">×</span>
-            <span className="sr-only">Fechar aviso</span>
+            <span className="sr-only">{t('dismiss')}</span>
           </button>
         </div>
       )}

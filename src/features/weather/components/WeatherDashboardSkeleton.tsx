@@ -1,11 +1,13 @@
+import { useTranslation } from 'react-i18next'
 import { Card } from '@/shared/components/Card'
 import { Skeleton } from '@/shared/components/Skeleton'
 import styles from './WeatherDashboard.module.css'
 
 /** Mirrors the dashboard layout so nothing jumps when the data arrives. */
 export function WeatherDashboardSkeleton() {
+  const { t } = useTranslation('weather')
   return (
-    <div className={styles.grid} role="status" aria-label="Carregando previsão do tempo">
+    <div className={styles.grid} role="status" aria-label={t('loading')}>
       <div className={styles.current}>
         <Card>
           <div className={styles.skeletonStack}>

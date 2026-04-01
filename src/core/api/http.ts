@@ -1,10 +1,20 @@
-export class ApiError extends Error {
-  readonly status: number | undefined
+export type ApiErrorKind = 'network' | 'http'
 
-  constructor(message: string, status?: number) {
-    super(message)
+/**
+ * Errors carry a kind and status instead of a ready-made message, so the UI can describe them in
+ * the active language. `reason` is the explanation sent by Open-Meteo (third-party text, shown as is).
+ */
+export class ApiError extends Error {
+  readonly kind: ApiErrorKind
+  readonly status: number | undefined
+  readonly reason: string | undefined
+
+  constructor(kind: ApiErrorKind, options: { status?: number; reason?: string } = {}) {
+    super(options.reason ?? (kind === 'network' ? 'Network error' : `HTTP ${options.status}`))
     this.name = 'ApiError'
-    this.status = status
+    this.kind = kind
+    this.status = options.status
+    this.reason = options.reason
   }
 }
 
@@ -15,7 +25,7 @@ interface OpenMeteoErrorBody {
 
 /**
  * Small `fetch` wrapper that throws an {@link ApiError} for network failures and non-2xx responses.
- * Open-Meteo answers invalid requests with `{ error: true, reason }`, which is surfaced as the message.
+ * Open-Meteo answers invalid requests with `{ error: true, reason }`.
  */
 export async function fetchJson<T>(url: URL | string, init?: RequestInit): Promise<T> {
   let response: Response
@@ -23,12 +33,12 @@ export async function fetchJson<T>(url: URL | string, init?: RequestInit): Promi
     response = await fetch(url, init)
   } catch (error) {
     if (error instanceof DOMException && error.name === 'AbortError') throw error
-    throw new ApiError('Não foi possível conectar ao servidor. Verifique sua conexão.')
+    throw new ApiError('network')
   }
 
   if (!response.ok) {
     const body = (await response.json().catch(() => null)) as OpenMeteoErrorBody | null
-    throw new ApiError(body?.reason ?? `Erro ${response.status} ao buscar dados.`, response.status)
+    throw new ApiError('http', { status: response.status, reason: body?.reason })
   }
 
   return (await response.json()) as T

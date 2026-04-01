@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import styles from './SaveCityButton.module.css'
 
 interface SaveCityButtonProps {
@@ -7,13 +8,14 @@ interface SaveCityButtonProps {
 }
 
 export function SaveCityButton({ cityName, saved, onToggle }: SaveCityButtonProps) {
+  const { t } = useTranslation('cities')
   return (
     <button
       type="button"
       className={styles.button}
       aria-pressed={saved}
       onClick={onToggle}
-      title={saved ? 'Remover dos favoritos' : 'Salvar nos favoritos'}
+      title={saved ? t('removeTitle') : t('saveTitle')}
     >
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" className={styles.icon}>
         <path
@@ -23,7 +25,7 @@ export function SaveCityButton({ cityName, saved, onToggle }: SaveCityButtonProp
         />
       </svg>
       {/* With aria-pressed the name stays constant; the pressed state conveys saved/unsaved. */}
-      <span className="sr-only">Salvar {cityName} nos favoritos</span>
+      <span className="sr-only">{t('save', { name: cityName })}</span>
     </button>
   )
 }

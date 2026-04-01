@@ -1,4 +1,5 @@
 import { useId } from 'react'
+import { useTranslation } from 'react-i18next'
 import { SegmentedControl } from '@/shared/components/SegmentedControl'
 import {
   TEMPERATURE_SYMBOL,
@@ -11,12 +12,13 @@ import styles from './UnitToggle.module.css'
 
 export function UnitToggle() {
   const { temperatureUnit, windSpeedUnit, setTemperatureUnit, setWindSpeedUnit } = useUnits()
+  const { t } = useTranslation('settings')
   const name = useId()
 
   return (
     <div className={styles.toggles}>
       <SegmentedControl
-        label="Unidade de temperatura"
+        label={t('temperatureUnit')}
         name={`${name}-temperature`}
         value={temperatureUnit}
         onChange={setTemperatureUnit}
@@ -26,7 +28,7 @@ export function UnitToggle() {
         }))}
       />
       <SegmentedControl
-        label="Unidade de velocidade do vento"
+        label={t('windSpeedUnit')}
         name={`${name}-wind`}
         value={windSpeedUnit}
         onChange={setWindSpeedUnit}

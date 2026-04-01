@@ -1,4 +1,5 @@
 import { QueryErrorResetBoundary } from '@tanstack/react-query'
+import { Trans, useTranslation } from 'react-i18next'
 import { DEFAULT_PLACE } from '@/core/constants'
 import { isPlace } from '@/core/types/isPlace'
 import type { Place } from '@/core/types/place'
@@ -15,6 +16,7 @@ import { useLocalStorage } from '@/shared/hooks/useLocalStorage'
 import styles from './App.module.css'
 
 export function App() {
+  const { t } = useTranslation()
   // The last viewed place is restored on the next visit.
   const [place, setPlace] = useLocalStorage<Place>('last-place', DEFAULT_PLACE, isPlace)
   const savedCities = useSavedCities()
@@ -23,13 +25,13 @@ export function App() {
   return (
     <div className={styles.app}>
       <a className="skip-link" href="#conteudo">
-        Pular para o conteúdo
+        {t('skipToContent')}
       </a>
 
       <header className={styles.header}>
         <div className={styles.brand}>
           <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" width={32} height={32} />
-          <h1 className={styles.title}>Clima</h1>
+          <h1 className={styles.title}>{t('appName')}</h1>
         </div>
         <div className={styles.toolbar}>
           <CitySearch onSelect={setPlace} />
@@ -54,8 +56,8 @@ export function App() {
               resetKeys={[place.id]}
               fallback={({ reset: retry }) => (
                 <ErrorState
-                  title="Algo deu errado ao exibir a previsão"
-                  message="Tente novamente ou escolha outra cidade."
+                  title={t('errors.boundaryTitle')}
+                  message={t('errors.boundaryMessage')}
                   onRetry={retry}
                 />
               )}
@@ -80,11 +82,14 @@ export function App() {
       </main>
 
       <footer className={styles.footer}>
-        Dados meteorológicos por{' '}
-        <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">
-          Open-Meteo.com
-        </a>{' '}
-        (CC BY 4.0)
+        <Trans
+          t={t}
+          i18nKey="attribution"
+          components={{
+            // <Trans> injects the link text from the translation.
+            link: <a href="https://open-meteo.com/" target="_blank" rel="noreferrer" />,
+          }}
+        />
       </footer>
     </div>
   )

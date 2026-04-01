@@ -32,12 +32,19 @@ export function toPlace(result: GeocodingResult): Place {
   }
 }
 
-/** Searches cities by name, returning names localized in Portuguese. */
-export async function searchPlaces(query: string, signal?: AbortSignal): Promise<Place[]> {
+/** Language codes accepted by the geocoding API (ISO 639-1). */
+export type GeocodingLanguage = 'pt' | 'en'
+
+/** Searches cities by name; place and country names come back in `language`. */
+export async function searchPlaces(
+  query: string,
+  language: GeocodingLanguage,
+  signal?: AbortSignal,
+): Promise<Place[]> {
   const name = query.trim()
   if (name.length < MIN_QUERY_LENGTH) return []
 
-  const url = buildUrl(GEOCODING_URL, { name, count: 8, language: 'pt', format: 'json' })
+  const url = buildUrl(GEOCODING_URL, { name, count: 8, language, format: 'json' })
   const response = await fetchJson<GeocodingResponse>(url, { signal })
   return (response.results ?? []).map(toPlace)
 }

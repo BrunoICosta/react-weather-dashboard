@@ -1,16 +1,11 @@
 import { useId, type ReactNode } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import type { Place } from '@/core/types/place'
-import { Card } from '@/shared/components/Card'
-import {
-  formatCoordinates,
-  formatLocalTime,
-  formatPercent,
-  formatPrecipitation,
-  getUvLevel,
-  toCompassPoint,
-} from '@/shared/lib/format'
 import { useUnits } from '@/features/settings/units/unitsContext'
-import { getWeatherDescription } from '../lib/weatherCodes'
+import { useFormatters } from '@/i18n/useFormatters'
+import { Card } from '@/shared/components/Card'
+import { getUvLevel } from '@/shared/lib/format'
+import { useWeatherDescription } from '../lib/weatherCodes'
 import type { CurrentWeather, DailyPoint } from '../types'
 import styles from './CurrentConditions.module.css'
 import { WeatherIcon } from './WeatherIcon'
@@ -24,12 +19,16 @@ interface CurrentConditionsProps {
 }
 
 export function CurrentConditions({ place, current, today, action }: CurrentConditionsProps) {
+  const { t } = useTranslation('weather')
+  const { t: tLocation } = useTranslation('location')
   const { formatTemperature, formatWindSpeed } = useUnits()
+  const format = useFormatters()
+  const describe = useWeatherDescription()
   const titleId = useId()
-  const description = getWeatherDescription(current.weatherCode)
-  const uv = getUvLevel(current.uvIndex)
+
+  const name = place.isCurrentLocation ? tLocation('currentPlace') : place.name
   const subtitle = place.isCurrentLocation
-    ? formatCoordinates(place.latitude, place.longitude)
+    ? format.coordinates(place.latitude, place.longitude)
     : [place.region, place.country].filter(Boolean).join(', ')
 
   return (
@@ -38,13 +37,18 @@ export function CurrentConditions({ place, current, today, action }: CurrentCond
         <div>
           <div className={styles.heading}>
             <h2 id={titleId} className={styles.place}>
-              {place.name}
+              {name}
             </h2>
             {action}
           </div>
           {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
           <p className={styles.updated}>
-            Atualizado às <time>{formatLocalTime(current.time)}</time> (horário local)
+            <Trans
+              t={t}
+              i18nKey="updatedAt"
+              values={{ time: format.localTime(current.time) }}
+              components={{ time: <time dateTime={current.time} /> }}
+            />
           </p>
         </div>
         <WeatherIcon
@@ -57,18 +61,20 @@ export function CurrentConditions({ place, current, today, action }: CurrentCond
 
       <div className={styles.now}>
         <p className={styles.temperature}>
-          <span className="sr-only">Temperatura atual: </span>
+          <span className="sr-only">{t('currentTemperature')} </span>
           {formatTemperature(current.temperature)}
         </p>
         <div>
-          <p className={styles.description}>{description}</p>
+          <p className={styles.description}>{describe(current.weatherCode)}</p>
           <p className={styles.feelsLike}>
-            Sensação térmica {formatTemperature(current.apparentTemperature)}
+            {t('feelsLike', { value: formatTemperature(current.apparentTemperature) })}
           </p>
           {today && (
             <p className={styles.range}>
-              Máx. {formatTemperature(today.temperatureMax)} · Mín.{' '}
-              {formatTemperature(today.temperatureMin)}
+              {t('todayRange', {
+                max: formatTemperature(today.temperatureMax),
+                min: formatTemperature(today.temperatureMin),
+              })}
             </p>
           )}
         </div>
@@ -76,30 +82,33 @@ export function CurrentConditions({ place, current, today, action }: CurrentCond
 
       <dl className={styles.details}>
         <div className={styles.detail}>
-          <dt>Umidade</dt>
-          <dd>{formatPercent(current.humidity)}</dd>
+          <dt>{t('humidity')}</dt>
+          <dd>{format.percent(current.humidity)}</dd>
         </div>
         <div className={styles.detail}>
-          <dt>Vento</dt>
+          <dt>{t('wind')}</dt>
           <dd>
             {formatWindSpeed(current.windSpeed)}{' '}
-            <span className={styles.muted} title={`Direção: ${current.windDirection}°`}>
-              {toCompassPoint(current.windDirection)}
+            <span
+              className={styles.muted}
+              title={t('windDirection', { degrees: current.windDirection })}
+            >
+              {format.compass(current.windDirection)}
             </span>
           </dd>
         </div>
         <div className={styles.detail}>
-          <dt>Índice UV</dt>
+          <dt>{t('uvIndex')}</dt>
           <dd>
-            {Math.round(current.uvIndex)}{' '}
-            <span className={styles.uvBadge} data-level={uv.level}>
-              {uv.label}
+            {format.integer(current.uvIndex)}{' '}
+            <span className={styles.uvBadge} data-level={getUvLevel(current.uvIndex)}>
+              {format.uvLabel(current.uvIndex)}
             </span>
           </dd>
         </div>
         <div className={styles.detail}>
-          <dt>Precipitação</dt>
-          <dd>{formatPrecipitation(current.precipitation)}</dd>
+          <dt>{t('precipitation')}</dt>
+          <dd>{format.precipitation(current.precipitation)}</dd>
         </div>
       </dl>
     </Card>
