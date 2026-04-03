@@ -6,6 +6,7 @@ import type { Place } from '@/core/types/place'
 import { SavedCities } from '@/features/cities/components/SavedCities'
 import { SaveCityButton } from '@/features/cities/components/SaveCityButton'
 import { useSavedCities } from '@/features/cities/hooks/useSavedCities'
+import { LanguageSwitcher } from '@/features/settings/components/LanguageSwitcher'
 import { UnitToggle } from '@/features/settings/components/UnitToggle'
 import { LocationButton } from '@/features/location/components/LocationButton'
 import { CitySearch } from '@/features/search/components/CitySearch'
@@ -39,6 +40,7 @@ export function App() {
         </div>
         <div className={styles.units}>
           <UnitToggle />
+          <LanguageSwitcher />
         </div>
       </header>
 

@@ -3,6 +3,10 @@ import styles from './SegmentedControl.module.css'
 interface Option<T extends string> {
   value: T
   label: string
+  /** Longer accessible name when the visible label is an abbreviation (e.g. "EN"). */
+  accessibleLabel?: string
+  /** Language of the option text, so screen readers pronounce it correctly. */
+  lang?: string
 }
 
 interface SegmentedControlProps<T extends string> {
@@ -33,8 +37,12 @@ export function SegmentedControl<T extends string>({
             checked={option.value === value}
             onChange={() => onChange(option.value)}
             className={styles.input}
+            aria-label={option.accessibleLabel}
+            lang={option.lang}
           />
-          <span className={styles.label}>{option.label}</span>
+          <span className={styles.label} aria-hidden={option.accessibleLabel ? true : undefined}>
+            {option.label}
+          </span>
         </label>
       ))}
     </div>
