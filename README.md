@@ -1,10 +1,13 @@
 # Clima — React Weather Dashboard
 
+🇬🇧 [Read in English](README.en.md)
+
 Painel de clima responsivo feito com React 19, TypeScript e TanStack Query sobre a API pública
 (e sem chave) do [Open-Meteo](https://open-meteo.com/). Busque qualquer cidade com autocomplete ou
 use a sua localização para ver as condições atuais, um gráfico das próximas 24 horas e a previsão de
 7 dias. Salve cidades favoritas para alternar entre elas rapidamente, troque entre °C/°F e km/h/mph,
-e veja o visual se adaptar ao tempo e ao horário (dia/noite) do local consultado.
+e veja o visual se adaptar ao tempo e ao horário (dia/noite) do local consultado. A interface está
+disponível em português (Brasil) e inglês.
 
 **Demo:** https://brunoicosta.github.io/react-weather-dashboard/
 
@@ -31,25 +34,29 @@ e veja o visual se adaptar ao tempo e ao horário (dia/noite) do local consultad
   chuva, tempestade, neve) e dia/noite; à noite e em tempestades o tema fica escuro.
 - **Estados de carregamento e erro** — skeletons que espelham o layout, estado de erro com
   "Tentar novamente" e _error boundary_ integrado ao `QueryErrorResetBoundary`.
+- **Português e inglês** — seletor de idioma no cabeçalho; textos, descrições do tempo, datas,
+  horas e números seguem o idioma ativo, e a busca pede ao geocoding nomes de cidades nesse idioma.
 - **Responsivo e acessível** — mobile first (testado a partir de 320 px), link "pular para o
   conteúdo", foco visível, rótulos e `aria-*` em todos os controles, respeito a
   `prefers-reduced-motion`.
 
 ## Stack
 
-| Ferramenta                                        | Versão          |
-| ------------------------------------------------- | --------------- |
-| React / React DOM                                 | 19.2.4          |
-| TypeScript (strict)                               | 5.9.3           |
-| Vite + @vitejs/plugin-react                       | 7.3.1           |
-| TanStack Query                                    | 5.90.21         |
-| Recharts                                          | 3.7.0           |
-| Vitest                                            | 4.0.18          |
-| Testing Library (React 16.3.2, user-event 14.6.1) | —               |
-| MSW (Mock Service Worker)                         | 2.12.10         |
-| jsdom                                             | 28.1.0          |
-| ESLint + typescript-eslint                        | 9.39.3 / 8.56.1 |
-| Prettier                                          | 3.8.1           |
+| Ferramenta                                        | Versão           |
+| ------------------------------------------------- | ---------------- |
+| React / React DOM                                 | 19.2.4           |
+| TypeScript (strict)                               | 5.9.3            |
+| Vite + @vitejs/plugin-react                       | 7.3.1            |
+| TanStack Query                                    | 5.90.21          |
+| Recharts                                          | 3.7.0            |
+| Vitest                                            | 4.0.18           |
+| Testing Library (React 16.3.2, user-event 14.6.1) | —                |
+| MSW (Mock Service Worker)                         | 2.12.10          |
+| jsdom                                             | 28.1.0           |
+| ESLint + typescript-eslint                        | 9.39.3 / 8.56.1  |
+| Prettier                                          | 3.8.1            |
+| i18next / react-i18next                           | 25.8.13 / 16.5.4 |
+| i18next-browser-languagedetector                  | 8.2.1            |
 
 Estilos em CSS Modules + CSS moderno (custom properties, `color-mix`, `backdrop-filter`), sem
 framework de UI.
@@ -85,6 +92,36 @@ framework de UI.
 - **Build.** Dependências separadas em _chunks_ (`react`, `query`, `charts`) para melhor cache; o
   `base` do Vite vem de `BASE_PATH` no deploy do GitHub Pages.
 
+## Internacionalização
+
+A interface usa [i18next](https://www.i18next.com/) com `react-i18next`.
+
+- **Idiomas:** `pt-BR` (padrão) e `en`. O idioma inicial segue esta ordem: escolha salva no
+  `localStorage` (`clima:language`), idioma do navegador (qualquer `pt*` vira `pt-BR`; os demais,
+  `en`) e, por fim, `pt-BR`. O seletor no cabeçalho troca o idioma na hora, salva a escolha e
+  atualiza `<html lang>` e o título da página.
+- **Recursos tipados:** os textos ficam em `src/i18n/locales/pt-BR.ts` e `en.ts`, divididos em
+  namespaces por feature (`common`, `weather`, `search`, `location`, `cities`, `settings`). O arquivo
+  pt-BR é a fonte das chaves: `en.ts` usa `satisfies LocaleResources`, então uma chave faltando ou a
+  mais quebra o `tsc`. O `t()` é tipado via `CustomTypeOptions` (`src/i18n/i18next.d.ts`).
+- **Códigos do tempo:** cada código WMO tem descrição nos dois idiomas (`weather.codes`). Nomes de
+  cidades e países vêm da API de geocoding com `language=pt` ou `language=en`, conforme o idioma ativo.
+- **Formatação:** `useFormatters()` liga as funções puras de `shared/lib/format.ts` ao idioma ativo
+  (números, porcentagens, dia da semana, datas por extenso, horas, pontos cardeais).
+- **Erros:** a camada de API e a geolocalização devolvem códigos, não frases; a interface traduz.
+- **Testes:** o setup do Vitest coloca o app em `pt-BR` antes de cada teste. Há testes para detecção e
+  persistência do idioma, para o seletor e para componentes renderizados nos dois idiomas.
+
+### Como adicionar um idioma
+
+1. Crie `src/i18n/locales/<código>.ts` exportando um objeto `satisfies LocaleResources`, copiando a
+   estrutura de `pt-BR.ts`.
+2. Registre-o em `resources` e em `SUPPORTED_LANGUAGES` (`src/i18n/config.ts`) e ajuste
+   `normalizeLanguage` para mapear o idioma do navegador.
+3. Adicione a abreviação no `LanguageSwitcher` e o nome do idioma em `common.languages` de todos os
+   arquivos.
+4. Se a API de geocoding aceitar o idioma, mapeie-o em `usePlaceSearch`.
+
 ## Como rodar
 
 Pré-requisitos: Node.js 22+ e npm 10+.
@@ -114,6 +151,7 @@ Nenhuma variável de ambiente ou chave de API é necessária.
 src/
 ├── app/                 # App, providers e configuração do QueryClient
 ├── core/                # cliente HTTP, tipos de domínio (Place) e constantes
+├── i18n/                # configuração do i18next, recursos pt-BR/en e hooks de formatação
 ├── features/
 │   ├── cities/          # cidades salvas (hook + chips + botão de favoritar)
 │   ├── location/        # geolocalização do navegador
@@ -128,6 +166,7 @@ src/
 
 ## Próximos passos
 
+- Traduzir também os nomes das cidades já salvas quando o idioma muda.
 - Nome real para "Minha localização" com um serviço de geocodificação reversa.
 - Alertas meteorológicos e qualidade do ar (Air Quality API do Open-Meteo).
 - PWA com cache offline da última previsão.
