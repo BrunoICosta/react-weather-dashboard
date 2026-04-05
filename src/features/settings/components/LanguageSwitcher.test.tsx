@@ -6,6 +6,34 @@ import { server } from '@/test/mocks/server'
 import { renderWithProviders } from '@/test/render'
 
 describe('LanguageSwitcher', () => {
+  it('renders one flag radio per language, named in its own language', async () => {
+    renderWithProviders(<App />)
+    await screen.findByRole('region', { name: 'São Paulo' })
+
+    const group = screen.getByRole('radiogroup', { name: 'Idioma' })
+    const portuguese = within(group).getByRole('radio', { name: 'Português (Brasil)' })
+    const english = within(group).getByRole('radio', { name: 'English' })
+
+    expect(portuguese).toHaveAttribute('lang', 'pt-BR')
+    expect(english).toHaveAttribute('lang', 'en')
+    expect(within(group).getByTitle('English')).toContainElement(english)
+    // Flags are decorative: the accessible name comes from the radio label.
+    expect(group.querySelectorAll('svg[aria-hidden="true"]')).toHaveLength(2)
+    expect(within(group).queryByText(/^(PT|EN)$/)).not.toBeInTheDocument()
+  })
+
+  it('switches language with the arrow keys and persists the choice', async () => {
+    const { user } = renderWithProviders(<App />)
+    await screen.findByRole('region', { name: 'São Paulo' })
+
+    screen.getByRole('radio', { name: 'Português (Brasil)' }).focus()
+    await user.keyboard('{ArrowRight}')
+
+    expect(screen.getByRole('radio', { name: 'English' })).toBeChecked()
+    expect(screen.getByRole('heading', { level: 1, name: 'Weather' })).toBeInTheDocument()
+    expect(localStorage.getItem(LANGUAGE_STORAGE_KEY)).toBe('en')
+  })
+
   it('shows the current language and switches the whole UI to English', async () => {
     const { user } = renderWithProviders(<App />)
     await screen.findByRole('region', { name: 'São Paulo' })

@@ -1,0 +1,66 @@
+.group {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-strong);
+  box-shadow: var(--shadow);
+}
+
+.option {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.flag {
+  display: grid;
+  border-radius: 4px;
+  line-height: 0;
+  opacity: 0.55;
+  filter: grayscale(0.7);
+  transition:
+    opacity 0.15s ease,
+    filter 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.option:hover .flag,
+.input:focus-visible + .flag {
+  opacity: 1;
+  filter: none;
+}
+
+/* Active language: full color plus a ring, so the state never relies on color alone. */
+.input:checked + .flag {
+  opacity: 1;
+  filter: none;
+  box-shadow:
+    0 0 0 2px var(--surface-solid),
+    0 0 0 4px var(--accent);
+}
+
+.input:focus-visible + .flag {
+  outline: 3px solid var(--focus);
+  outline-offset: 5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flag {
+    transition: none;
+  }
+}

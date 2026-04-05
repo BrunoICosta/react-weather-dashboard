@@ -1,13 +1,19 @@
-import { useId } from 'react'
+import { useId, type ComponentType } from 'react'
 import { useTranslation } from 'react-i18next'
 import { normalizeLanguage, SUPPORTED_LANGUAGES, type Language } from '@/i18n/config'
-import { SegmentedControl } from '@/shared/components/SegmentedControl'
+import { BrazilFlag, UsaFlag } from './Flags'
+import styles from './LanguageSwitcher.module.css'
 
-const SHORT_LABEL: Record<Language, string> = { 'pt-BR': 'PT', en: 'EN' }
+const FLAGS: Record<Language, ComponentType<{ className?: string }>> = {
+  'pt-BR': BrazilFlag,
+  en: UsaFlag,
+}
 
 /**
- * Switches the UI language. i18next persists the choice in localStorage and `<html lang>` is
- * updated by the i18n setup.
+ * Switches the UI language with two flag radios. Native radio inputs give the expected keyboard
+ * behaviour (Tab into the group, arrow keys between languages). Each option is named in its own
+ * language ("Português (Brasil)", "English"); the flags are decorative.
+ * i18next persists the choice and the i18n setup keeps `<html lang>` in sync.
  */
 export function LanguageSwitcher() {
   const { t, i18n } = useTranslation()
@@ -15,18 +21,28 @@ export function LanguageSwitcher() {
   const current = normalizeLanguage(i18n.resolvedLanguage)
 
   return (
-    <SegmentedControl
-      label={t('language')}
-      name={`${name}-language`}
-      value={current}
-      onChange={(language) => void i18n.changeLanguage(language)}
-      options={SUPPORTED_LANGUAGES.map((language) => ({
-        value: language,
-        label: SHORT_LABEL[language],
-        // Each language is named in itself ("English", "Português (Brasil)").
-        accessibleLabel: t(`languages.${language}`, { lng: language }),
-        lang: language,
-      }))}
-    />
+    <div role="radiogroup" aria-label={t('language')} className={styles.group}>
+      {SUPPORTED_LANGUAGES.map((language) => {
+        const Flag = FLAGS[language]
+        const label = t(`languages.${language}`, { lng: language })
+        return (
+          <label key={language} className={styles.option} title={label}>
+            <input
+              type="radio"
+              name={name}
+              value={language}
+              checked={language === current}
+              onChange={() => void i18n.changeLanguage(language)}
+              className={styles.input}
+              aria-label={label}
+              lang={language}
+            />
+            <span className={styles.flag}>
+              <Flag />
+            </span>
+          </label>
+        )
+      })}
+    </div>
   )
 }
