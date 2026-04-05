@@ -1,6 +1,6 @@
 # Clima — React Weather Dashboard
 
-🇬🇧 [Read in English](README.en.md)
+**English version:** [README.en.md](README.en.md)
 
 Painel de clima responsivo feito com React 19, TypeScript e TanStack Query sobre a API pública
 (e sem chave) do [Open-Meteo](https://open-meteo.com/). Busque qualquer cidade com autocomplete ou
