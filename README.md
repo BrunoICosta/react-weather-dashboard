@@ -9,7 +9,7 @@ use a sua localização para ver as condições atuais, um gráfico das próxima
 e veja o visual se adaptar ao tempo e ao horário (dia/noite) do local consultado. A interface está
 disponível em português (Brasil) e inglês.
 
-**Demo:** https://brunoicosta.github.io/react-weather-dashboard/
+**Demo:** https://portfolio.brunoisaac.dev/react-weather-dashboard/
 
 ![Captura de tela do painel mostrando São Paulo, gráfico de 24 horas e previsão de 7 dias](docs/screenshot.png)
 
@@ -90,7 +90,7 @@ framework de UI.
   (`onUnhandledRequest: 'error'`), cobrindo debounce, erros da API, retry e troca de unidades sem
   _refetch_.
 - **Build.** Dependências separadas em _chunks_ (`react`, `query`, `charts`) para melhor cache; o
-  `base` do Vite vem de `BASE_PATH` no deploy do GitHub Pages.
+  script `build:cf` gera o build com `base` `/react-weather-dashboard/` para a publicação.
 
 ## Internacionalização
 
@@ -140,10 +140,18 @@ npm run lint         # ESLint
 npm run typecheck    # checagem de tipos
 npm run format       # Prettier
 npm run build        # build de produção em dist/
+npm run build:cf     # build de produção com base /react-weather-dashboard/ (deploy)
 npm run preview      # serve o build localmente
 ```
 
 Nenhuma variável de ambiente ou chave de API é necessária.
+
+## Deploy
+
+Publicado na Cloudflare (Workers static assets) em
+https://portfolio.brunoisaac.dev/react-weather-dashboard/ pelo pipeline do repositório
+[portfolio](https://github.com/BrunoICosta/portfolio), que roda `npm run build:cf` e publica a pasta
+`dist/`. Este repositório mantém apenas o CI (lint, formatação, testes e build).
 
 ## Estrutura de pastas
 

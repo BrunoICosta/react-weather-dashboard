@@ -5,7 +5,8 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-  // GitHub Pages serves the app from /<repo>/; the deploy workflow sets BASE_PATH.
+  // The live demo is served from /react-weather-dashboard/: `npm run build:cf` passes --base
+  // (BASE_PATH still works as an override for other hosts).
   base: process.env.BASE_PATH ?? '/',
   plugins: [react()],
   build: {

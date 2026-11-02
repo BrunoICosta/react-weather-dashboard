@@ -8,7 +8,7 @@ your location to see current conditions, a 24-hour chart and a 7-day forecast. S
 switch between °C/°F and km/h/mph, and watch the theme follow the weather and day/night at the
 selected place. The UI is available in Brazilian Portuguese (default) and English.
 
-**Demo:** https://brunoicosta.github.io/react-weather-dashboard/
+**Demo:** https://portfolio.brunoisaac.dev/react-weather-dashboard/
 
 ![Dashboard showing São Paulo, the 24-hour chart and the 7-day forecast](docs/screenshot.png)
 
@@ -44,9 +44,17 @@ npm run dev        # http://localhost:5173
 npm test           # unit and component tests
 npm run lint
 npm run build
+npm run build:cf   # production build served under /react-weather-dashboard/
 ```
 
 No API key or environment variable is needed.
+
+## Deploy
+
+Published on Cloudflare (Workers static assets) at
+https://portfolio.brunoisaac.dev/react-weather-dashboard/ by the pipeline of the
+[portfolio](https://github.com/BrunoICosta/portfolio) repository, which runs `npm run build:cf` and
+publishes `dist/`. This repository only runs CI (lint, formatting, tests and build).
 
 ## Author
 
