@@ -1,4 +1,4 @@
-# Clima — React Weather Dashboard
+# Clima | React Weather Dashboard
 
 **English version:** [README.en.md](README.en.md)
 
@@ -15,28 +15,28 @@ disponível em português (Brasil) e inglês.
 
 ## Funcionalidades
 
-- **Busca de cidades com autocomplete** — geocoding do Open-Meteo com debounce (350 ms), cache de
+- **Busca de cidades com autocomplete**: geocoding do Open-Meteo com debounce (350 ms), cache de
   um dia por termo e combobox acessível (setas, Enter, Esc, região `aria-live` com o total de
   resultados).
-- **Usar minha localização** — Geolocation API com estados de carregamento, mensagens em pt-BR para
+- **Usar minha localização**: Geolocation API com estados de carregamento, mensagens em pt-BR para
   permissão negada, posição indisponível e timeout, e acompanhamento da permissão via Permissions API.
-- **Condições atuais** — temperatura, sensação térmica, máx./mín. do dia, umidade, vento com direção
+- **Condições atuais**: temperatura, sensação térmica, máx./mín. do dia, umidade, vento com direção
   (N, NE, L…), índice UV com a categoria da OMS, precipitação, ícone SVG próprio e descrição em pt-BR
   para todos os códigos WMO.
-- **Próximas 24 horas** — gráfico de temperatura (linha/área) e de chance de chuva (barras), com
+- **Próximas 24 horas**: gráfico de temperatura (linha/área) e de chance de chuva (barras), com
   tooltips sincronizados e uma tabela com os mesmos dados para leitores de tela.
-- **Previsão de 7 dias** — ícone, chance máxima de chuva e barras de amplitude térmica na mesma
+- **Previsão de 7 dias**: ícone, chance máxima de chuva e barras de amplitude térmica na mesma
   escala da semana.
-- **Cidades salvas** — favoritos no `localStorage`, troca rápida por chips e _prefetch_ da previsão
+- **Cidades salvas**: favoritos no `localStorage`, troca rápida por chips e _prefetch_ da previsão
   ao passar o mouse/focar, para a troca ser instantânea. A última cidade vista é restaurada.
-- **Unidades** — °C/°F e km/h/mph, persistidas e convertidas no cliente (sem novas requisições).
-- **Tema dinâmico** — fundo e tokens de cor mudam conforme o tempo (céu limpo, nublado, neblina,
+- **Unidades**: °C/°F e km/h/mph, persistidas e convertidas no cliente (sem novas requisições).
+- **Tema dinâmico**: fundo e tokens de cor mudam conforme o tempo (céu limpo, nublado, neblina,
   chuva, tempestade, neve) e dia/noite; à noite e em tempestades o tema fica escuro.
-- **Estados de carregamento e erro** — skeletons que espelham o layout, estado de erro com
+- **Estados de carregamento e erro**: skeletons que espelham o layout, estado de erro com
   "Tentar novamente" e _error boundary_ integrado ao `QueryErrorResetBoundary`.
-- **Português e inglês** — seletor de idioma no cabeçalho; textos, descrições do tempo, datas,
+- **Português e inglês**: seletor de idioma no cabeçalho; textos, descrições do tempo, datas,
   horas e números seguem o idioma ativo, e a busca pede ao geocoding nomes de cidades nesse idioma.
-- **Responsivo e acessível** — mobile first (testado a partir de 320 px), link "pular para o
+- **Responsivo e acessível**: mobile first (testado a partir de 320 px), link "pular para o
   conteúdo", foco visível, rótulos e `aria-*` em todos os controles, respeito a
   `prefers-reduced-motion`.
 
@@ -50,7 +50,7 @@ disponível em português (Brasil) e inglês.
 | TanStack Query                                    | 5.90.21          |
 | Recharts                                          | 3.7.0            |
 | Vitest                                            | 4.0.18           |
-| Testing Library (React 16.3.2, user-event 14.6.1) | —                |
+| Testing Library (React 16.3.2, user-event 14.6.1) | ,                |
 | MSW (Mock Service Worker)                         | 2.12.10          |
 | jsdom                                             | 28.1.0           |
 | ESLint + typescript-eslint                        | 9.39.3 / 8.56.1  |
@@ -75,7 +75,7 @@ framework de UI.
   só formatação, então não invalida o cache nem gera requisição.
 - **Mapeamento para o domínio.** A resposta colunar do Open-Meteo é convertida em objetos
   (`mapForecast`) logo na camada de API. Horários usam o fuso do próprio local (`timezone=auto`) e
-  são tratados como strings ISO locais — nada passa por `Date` com o fuso do navegador, evitando
+  são tratados como strings ISO locais, nada passa por `Date` com o fuso do navegador, evitando
   "dias trocados".
 - **Dois gráficos em vez de eixo duplo.** Temperatura (°C) e probabilidade (%) têm escalas sem
   relação; empilhar dois gráficos com o mesmo eixo de tempo (`syncId`) é mais honesto do que um
@@ -128,7 +128,7 @@ Pré-requisitos: Node.js 22+ e npm 10+.
 
 ```bash
 npm install
-npm run dev          # ou npm start — http://localhost:5173
+npm run dev          # ou npm start, http://localhost:5173
 ```
 
 Outros scripts:
@@ -188,4 +188,4 @@ Código sob a licença [MIT](LICENSE). Dados meteorológicos por
 
 ## Autor
 
-Bruno Vinicius Isaac Costa — https://github.com/BrunoICosta
+Bruno Vinicius Isaac Costa Â· https://github.com/BrunoICosta

@@ -3,7 +3,7 @@ import type { LocaleResources } from './pt-BR'
 export const en = {
   common: {
     appName: 'Weather',
-    documentTitle: 'Weather — Forecast dashboard',
+    documentTitle: 'Weather | Forecast dashboard',
     skipToContent: 'Skip to content',
     attribution: 'Weather data by <link>Open-Meteo.com</link> (CC BY 4.0)',
     retry: 'Try again',

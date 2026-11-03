@@ -1,4 +1,4 @@
-# Clima — React Weather Dashboard
+# Clima | React Weather Dashboard
 
 **Português:** [README.md](README.md)
 
@@ -58,5 +58,5 @@ publishes `dist/`. This repository only runs CI (lint, formatting, tests and bui
 
 ## Author
 
-Bruno Vinicius Isaac Costa — https://github.com/BrunoICosta · MIT License · Weather data by
+Bruno Vinicius Isaac Costa Â· https://github.com/BrunoICosta · MIT License · Weather data by
 Open-Meteo.com (CC BY 4.0)

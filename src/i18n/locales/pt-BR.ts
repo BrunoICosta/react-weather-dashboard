@@ -1,11 +1,11 @@
 /**
- * Portuguese (Brazil) resources — the source of truth for the translation keys.
+ * Portuguese (Brazil) resources, the source of truth for the translation keys.
  * Every other locale must match this shape (enforced by `LocaleResources`).
  */
 export const ptBR = {
   common: {
     appName: 'Clima',
-    documentTitle: 'Clima — Painel do tempo',
+    documentTitle: 'Clima | Painel do tempo',
     skipToContent: 'Pular para o conteúdo',
     attribution: 'Dados meteorológicos por <link>Open-Meteo.com</link> (CC BY 4.0)',
     retry: 'Tentar novamente',
