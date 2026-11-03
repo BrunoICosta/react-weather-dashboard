@@ -4,6 +4,8 @@ export const en = {
   common: {
     appName: 'Weather',
     documentTitle: 'Weather | Forecast dashboard',
+    metaDescription:
+      'Weather dashboard with hourly and 7-day forecasts powered by the Open-Meteo API.',
     skipToContent: 'Skip to content',
     attribution: 'Weather data by <link>Open-Meteo.com</link> (CC BY 4.0)',
     retry: 'Try again',

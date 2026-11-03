@@ -41,6 +41,7 @@
 }
 
 .rain svg {
+  flex-shrink: 0;
   width: 0.625rem;
   height: 0.875rem;
   color: var(--chart-precipitation);
@@ -81,7 +82,7 @@
 
 @media (max-width: 400px) {
   .day {
-    grid-template-columns: 2.75rem 2.25rem 2.75rem minmax(0, 1fr);
+    grid-template-columns: 3.25rem 2.25rem 3.25rem minmax(0, 1fr);
     gap: var(--space-1);
   }
 

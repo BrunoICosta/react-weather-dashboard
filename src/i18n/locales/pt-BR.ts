@@ -6,6 +6,7 @@ export const ptBR = {
   common: {
     appName: 'Clima',
     documentTitle: 'Clima | Painel do tempo',
+    metaDescription: 'Painel de clima com previsão horária e de 7 dias usando a API Open-Meteo.',
     skipToContent: 'Pular para o conteúdo',
     attribution: 'Dados meteorológicos por <link>Open-Meteo.com</link> (CC BY 4.0)',
     retry: 'Tentar novamente',

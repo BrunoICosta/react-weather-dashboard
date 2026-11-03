@@ -142,7 +142,9 @@ export function HourlyChart({ points }: HourlyChartProps) {
               tick={AXIS_TICK}
               tickLine={false}
               axisLine={{ stroke: 'var(--chart-grid)' }}
-              interval={2}
+              // Let Recharts drop labels that would collide (e.g. "11 PM" on narrow phones).
+              interval="equidistantPreserveStart"
+              minTickGap={14}
             />
             <YAxis
               domain={[0, 100]}

@@ -23,11 +23,14 @@ export function isLanguage(value: unknown): value is Language {
   return SUPPORTED_LANGUAGES.includes(value as Language)
 }
 
-/** Keeps `<html lang>` and the document title in sync with the active language. */
+/** Keeps `<html lang>`, the document title and the meta description in sync with the language. */
 function syncDocument(instance: I18n) {
   if (typeof document === 'undefined') return
   document.documentElement.lang = instance.resolvedLanguage ?? DEFAULT_LANGUAGE
   document.title = instance.t('common:documentTitle')
+  document
+    .querySelector('meta[name="description"]')
+    ?.setAttribute('content', instance.t('common:metaDescription'))
 }
 
 /**

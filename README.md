@@ -1,4 +1,4 @@
-# Clima | React Weather Dashboard
+# Clima | Painel do tempo em React
 
 **English version:** [README.en.md](README.en.md)
 

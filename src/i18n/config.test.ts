@@ -45,8 +45,11 @@ describe('language detection', () => {
     expect(createI18n().resolvedLanguage).toBe('en')
   })
 
-  it('persists the choice and updates <html lang> and the title', async () => {
+  it('persists the choice and updates <html lang>, the title and the description', async () => {
     mockBrowserLanguages(['pt-BR'])
+    const meta = document.createElement('meta')
+    meta.name = 'description'
+    document.head.append(meta)
     const i18n = createI18n()
     expect(document.documentElement.lang).toBe('pt-BR')
 
@@ -55,6 +58,11 @@ describe('language detection', () => {
     expect(localStorage.getItem(LANGUAGE_STORAGE_KEY)).toBe('en')
     expect(document.documentElement.lang).toBe('en')
     expect(document.title).toBe(en.common.documentTitle)
+    expect(document.querySelector('meta[name="description"]')).toHaveAttribute(
+      'content',
+      en.common.metaDescription,
+    )
+    meta.remove()
   })
 })
 

@@ -1,4 +1,4 @@
-# Clima | React Weather Dashboard
+# Weather | React forecast dashboard
 
 **Português:** [README.md](README.md)
 
